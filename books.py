@@ -47,11 +47,11 @@ async def create_book(new_book=Body()):
 
 
 @app.put("/books/update_book/{book_title}")
-async def update_book(book_title: str, update_book=Body()):
+async def update_book(book_title: str, update_book_data=Body()):
     for book in BOOKS:
         if book.get("title").casefold() == book_title.casefold():
-            book["category"] = update_book["category"]
-            book["author"] = update_book["author"]
+            book["category"] = update_book_data["category"]
+            book["author"] = update_book_data["author"]
 
 
 @app.delete("/books/delete_book/{book_title}")
@@ -60,9 +60,5 @@ async def create_book(book_title: str):
         if BOOKS[i].get("title").casefold() == book_title.casefold():
             BOOKS.pop(i)
             break
-
-    return "Done"
-
-
 
     return "Done"
