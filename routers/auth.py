@@ -72,7 +72,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="could not validate user")
 
-    return {"username": username, "user_id": user_id}
+    return {"username": username, "id": user_id}
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
