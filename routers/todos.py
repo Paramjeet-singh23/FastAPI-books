@@ -1,12 +1,13 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from starlette import status
 from models import Todos
 from database import SessionLocal
 from .auth import get_current_user
+from utility import mail_smtp
 
 router = APIRouter()
 
@@ -54,6 +55,9 @@ async def create_todo(user: user_dependency, db: db_dependency, todo_request: To
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication failed")
     todo_model = Todos(**todo_request.dict(), owner_id=user.get("id"))
+
+    # when any item is created this mail should be sent
+    mail_smtp.send_mail()
 
     db.add(todo_model)
     db.commit()
